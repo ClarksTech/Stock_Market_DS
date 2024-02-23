@@ -8,6 +8,9 @@ packages = [{include = "stock_market_ds"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+pandas = "^2.2.1"
+plotly = "^5.19.0"
+yfinance = "^0.2.36"
 
 
 [build-system]
