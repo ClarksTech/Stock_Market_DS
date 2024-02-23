@@ -1,8 +1,15 @@
-This project is to analyse stocks against the market performance
+# Stock Market DS
+Stock Market DS is a project focusing on the use of stock market APIs to explore quantatative data analysis of stocks
 
-- Gather historical stock data
-- Preprocess the data
-- Feature extraction
-- Visualise
-- Identify relationships
-- Compare to S&P 500
+## Installation
+Poetry is used as the package manager handling all dependancies.
+
+Run the following Poetry command to install all project dependancies:
+```pwsh
+poetry install
+```
+
+## Usage
+```python
+```
+
