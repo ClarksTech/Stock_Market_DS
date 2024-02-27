@@ -20,7 +20,8 @@ To run the legacy code use:
 ```pwsh
 poetry run python legacy.py
 ```
-
-```python
+To run the current main script use:
+```pwsh
+poetry run python main.py
 ```
 
