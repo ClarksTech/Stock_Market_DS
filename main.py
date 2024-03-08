@@ -9,13 +9,13 @@ import pandas as pd
 #-------------------------------------------------- Main Script --------------------------------------------------#
 
 # Prompt user to select stock for examination
-stockTicker = input('Enter the ticker symbol for the stock you wish to examine, for example \'NVDA\':')
+stockTicker = input('Enter the ticker symbol for the stock you wish to examine, for example \'NVDA\': ')
 
 # only perform the API call is th CSV does not exist to reduce calls to the API
 path = f'/stockDataFiles/{stockTicker}.csv'
 
 if(os.path.isfile(path)):
-    df = pd.read_csv(f'/stockDataFiles/{stockTicker}.csv')
+    stockData = pd.read_csv(f'/stockDataFiles/{stockTicker}.csv')
 else:
     # Perform API call to get the stocks historical data
     stockData = sm.getApiIntraday(stockTicker)
@@ -31,12 +31,14 @@ else:
     stockData = si.genEmaSignal(stockData)
     stockData = si.genTotalSignal(stockData)
     stockData = si.genRsiSignal(stockData)
-    sv.plotStockData(stockData)
-    print(stockData.head(50))
-    print(stockData.totalSignal.value_counts())
 
     # save as csv file to prevent excess API calls and processing time in future program runs
     stockData.to_csv(f'/stockDataFiles/{stockTicker}.csv', index=False)
+
+# visualise the stock data
+sv.plotStockData(stockData)
+print(stockData.head(50))
+print(stockData.totalSignal.value_counts())
 
 #------------------------------------------------ Main Script End -------------------------------------------------#
 
