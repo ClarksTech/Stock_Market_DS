@@ -10,7 +10,7 @@ apiKey = os.getenv("ALPHA_VANTAGE_API_KEY")
 
 def getApiIntraday(symbol: str, function='TIME_SERIES_INTRADAY', interval='1min', month='', outputsize='full') -> pd.DataFrame:
     """
-    Return a datafram containing specified stock historical data
+    Return a dataframe containing specified stock historical data
     
     Parameter
     ---------
@@ -38,7 +38,7 @@ def getApiIntraday(symbol: str, function='TIME_SERIES_INTRADAY', interval='1min'
     
     # Alter the API call depending on the time series selected, as selection invalidates certain parameters
     if(function == 'TIME_SERIES_INTRADAY'):
-        apiUrl = f'https://www.alphavantage.co/query?function={function}&symbol={symbol}&interval={interval}&month={month}outputsize={outputsize}&datatype=csv&apikey=apiKey'
+        apiUrl = f'https://www.alphavantage.co/query?function={function}&symbol={symbol}&interval={interval}&month={month}&outputsize={outputsize}&datatype=csv&apikey=apiKey'
     elif (function == 'TIME_SERIES_DAILY'):
         apiUrl = f'https://www.alphavantage.co/query?function={function}&symbol={symbol}&outputsize={outputsize}&datatype=csv&apikey=apiKey'
     else:
@@ -46,6 +46,14 @@ def getApiIntraday(symbol: str, function='TIME_SERIES_INTRADAY', interval='1min'
 
     df = pd.read_csv(apiUrl)
     df = pd.DataFrame(df)
+
+    # remove days where no movement i.e. weekends
+    df=df[df.high!=df.low]
+    df.set_index('timestamp', inplace=True)
+
+    # save as csv file to prevent excess api call
+    df.to_csv(f'/stockDataFiles/{symbol}.csv', index=False)
+
     return(df)
 
 
