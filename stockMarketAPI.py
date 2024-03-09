@@ -48,8 +48,14 @@ def getApiIntraday(symbol: str, function='TIME_SERIES_INTRADAY', interval='1min'
     df = pd.DataFrame(df)
 
     # remove days where no movement i.e. weekends
+    print(df.shape[0])
+    print(df.head(1))
+    print(df.tail(1))
     df=df[df.high!=df.low]
-    df.set_index('timestamp', inplace=True)
+    #df.set_index('timestamp', inplace=True)
+    print(df.shape[0])
+    print(df.head(1))
+    print(df.tail(1))
 
     return(df)
 

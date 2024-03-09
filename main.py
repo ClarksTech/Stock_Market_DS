@@ -41,6 +41,8 @@ else:
 
 # resize to smaller size for testing
 print(stockData.shape[0])
+print(stockData.head(1))
+print(stockData.tail(1))
 print(stockData.totalSignal.value_counts())
 
 # visualise the stock data
