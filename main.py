@@ -12,33 +12,40 @@ import pandas as pd
 stockTicker = input('Enter the ticker symbol for the stock you wish to examine, for example \'NVDA\': ')
 
 # only perform the API call is th CSV does not exist to reduce calls to the API
-path = f'/stockDataFiles/{stockTicker}.csv'
+dirPath = os.path.dirname(__file__)
+filePath = f'{dirPath}\stockDataFiles\{stockTicker}.csv'
 
-if(os.path.isfile(path)):
-    stockData = pd.read_csv(f'/stockDataFiles/{stockTicker}.csv')
+if(os.path.isfile(filePath)):
+    print(f'Loading pre-existing data file for {stockTicker}...')
+    stockData = pd.read_csv(filePath)
 else:
     # Perform API call to get the stocks historical data
+    print(f'Performing API call for {stockTicker}...')
     stockData = sm.getApiIntraday(stockTicker)
-    print(stockData.head(1))
-    print(stockData.tail(1))
-    stockData = stockData.iloc[-500:]
-    print(stockData.head(1))
-    print(stockData.tail(1))
-    print(stockData.shape[0])
 
     # Generate all stock indicators adding to the dataframe
+    print(f'Generating stock indicators for {stockTicker}...')
     stockData = si.genStockIndicators(stockData)
+    print(f'Generating EMA signals for {stockTicker}...')
+    stockData = stockData[-60000:]
+    stockData.reset_index(inplace=True, drop=True)
     stockData = si.genEmaSignal(stockData)
+    print(f'Generating total signals for {stockTicker}...')
     stockData = si.genTotalSignal(stockData)
+    print(f'Generating RSI signals and updating total signal for {stockTicker}...')
     stockData = si.genRsiSignal(stockData)
 
     # save as csv file to prevent excess API calls and processing time in future program runs
-    stockData.to_csv(f'/stockDataFiles/{stockTicker}.csv', index=False)
+    print(f'Saving data file for {stockTicker}...')
+    stockData.to_csv(filePath, index=False)
+
+# resize to smaller size for testing
+print(stockData.shape[0])
+print(stockData.totalSignal.value_counts())
 
 # visualise the stock data
 sv.plotStockData(stockData)
-print(stockData.head(50))
-print(stockData.totalSignal.value_counts())
+
 
 #------------------------------------------------ Main Script End -------------------------------------------------#
 

@@ -51,9 +51,6 @@ def getApiIntraday(symbol: str, function='TIME_SERIES_INTRADAY', interval='1min'
     df=df[df.high!=df.low]
     df.set_index('timestamp', inplace=True)
 
-    # save as csv file to prevent excess api call
-    df.to_csv(f'/stockDataFiles/{symbol}.csv', index=False)
-
     return(df)
 
 

@@ -146,8 +146,8 @@ def genRsiSignal(df: pd.DataFrame, rsiLength=5, rsiUpLimit=50.1, rsiDownLimit=49
         elif not window.empty and window.lt(rsiDownLimit).all():
             rsiSignal[i] = 1
 
-        df['rsiSignal'] = rsiSignal
-        df['totalSignal'] = df.apply(lambda row: row['totalSignal'] if row['totalSignal'] == row['rsiSignal'] else 0, axis=1)
+    df['rsiSignal'] = rsiSignal
+    df['totalSignal'] = df.apply(lambda row: row['totalSignal'] if row['totalSignal'] == row['rsiSignal'] else 0, axis=1)
 
     return(df)
 
